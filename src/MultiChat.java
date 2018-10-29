@@ -3,20 +3,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
+
 public class MultiChat extends JFrame{
     ChatWindow[] clients;
-    Scanner input;
-    Runnable onMessageReceived;
-    public MultiChat() {
+    public MultiChat(){
 		clients = new ChatWindow[0];
-        onMessageReceived = new Runnable() {
-            @Override
-            public void run() {
-                for (int j = 0; j < clients.length; j++) {
-                    clients[j].receiveMessage();
-                }
-            }
-        };
         setTitle("Chat manager");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(null);
@@ -59,19 +50,18 @@ public class MultiChat extends JFrame{
         add(monText);
         add(monChampsTexte);
         add(update);
-    }
+ }
     public void addClient(String username){
 		ChatWindow[] nouveau = new ChatWindow[this.clients.length+1];
 		for(int i=0;i<clients.length;i+=1) {
 			nouveau[i]=clients[i];
 		}
-		nouveau[clients.length]=new ChatWindow(username, this.onMessageReceived);
+		nouveau[clients.length]=new ChatWindow(username);
 		clients = nouveau;
 		nouveau=null;
-		clients[0].message = username+" a rejoint la discussion";
-		onMessageReceived.run();
 	}
-    public static void main(String[] args) {
+	
+	public static void main(String[] args) {
         new MultiChat();
     }
 }
