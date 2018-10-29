@@ -1,0 +1,51 @@
+<project name="chat" default="all" basedir=".">
+  <!-- Definition des proprietes du projet -->
+  <property name="projet.sources.dir" value="src"/>
+  <property name="projet.lib.dir" value="lib"/>
+  <property name="projet.jar.file" value="Chat.jar"/>
+  <property name="projet.bin.dir" value="out"/>
+
+  <!-- Definition du classpath du projet -->
+  <path id="projet.classpath">
+    <fileset dir="${projet.lib.dir}">
+      <include name="*.jar"/>
+    </fileset>
+    <pathelement location="${projet.bin.dir}"/>
+  </path>
+ 
+  <!-- Compilation des classes du projet -->
+  <target name="compile" description="Compilation" depends="setup">
+    <javac srcdir="${projet.sources.dir}" 
+	          destdir="${projet.bin.dir}" debug="off" 
+		  optimize="on" deprecation="on">
+      <classpath refid="projet.classpath"/>
+    </javac>
+  </target>
+
+  <!--création du JAR-->
+  <target name="package" description="Création du JAR" depends="compile">
+      <jar jarfile="${projet.jar.file}" basedir="${projet.bin.dir}" compress="false">
+	  <manifest>
+                <attribute name="Main-Class" value="MultiChat"/>
+          </manifest>
+      </jar>
+  </target>
+
+  <!--nettoyage-->
+  <target name="clean" description="Supprime tous les 'generated'">
+      <delete dir="${projet.bin.dir}" verbose="true"></delete>
+      <delete file="${projet.jar.file}"/> 
+  </target>
+
+  <target name="setup">
+      <mkdir dir="${projet.lib.dir}"></mkdir>
+      <mkdir dir="${projet.bin.dir}"></mkdir>
+  </target>
+
+  <target name="run">
+      <java jar="${projet.jar.file}" fork="true"/>
+    </target>
+
+    <target name="all" description="Compilation et exécution"
+	depends="clean,setup,compile,package,run"/>
+</project>

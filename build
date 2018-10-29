@@ -1,0 +1,15 @@
+#!/bin/bash
+echo "clean"
+set -x
+rm -rf out chat.jar
+echo "setup"
+mkdir out
+echo "Main-Class: MultiChat" > out/mf.txt
+echo "compile"
+javac -d out src/*.java
+cd out
+echo "package"
+jar cfm ../chat.jar mf.txt *
+cd ..
+echo "run"
+java -jar chat.jar &
