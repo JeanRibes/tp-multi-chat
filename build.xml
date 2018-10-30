@@ -14,7 +14,7 @@
   </path>
  
   <!-- Compilation des classes du projet -->
-  <target name="compile" description="Compilation" depends="resolve">
+  <target name="compile" description="Compilation">
     <javac srcdir="${projet.sources.dir}" 
 	          destdir="${projet.bin.dir}" debug="off" 
 		  optimize="on" deprecation="on"
@@ -37,7 +37,7 @@
 	    </archives>
 	  </restrict>
 	  <manifest>
-                <attribute name="Main-Class" value="MultiChat"/>
+                <attribute name="Main-Class" value="Launcher"/>
 	  </manifest>
       </jar>
   </target>
@@ -60,8 +60,13 @@
 	  <!--    </ivy:cachepath>-->
   </target>
 
-  <target name="run">
+  <target name="run-gui">
       <java classname="MultiChat" fork="true">
+	  <classpath refid="projet.classpath"/>
+      </java>
+  </target>
+  <target name="run-cli">
+      <java classname="TerminalChat" fork="true">
 	  <classpath refid="projet.classpath"/>
       </java>
   </target>
@@ -72,7 +77,7 @@
     </target>
 
     <target name="all" description="Compilation et exécution"
-	depends="clean,setup,compile,package,run-jar"/>
+	depends="clean,setup,resolve,compile,package,run-gui"/>
 
     <!--Install IVY https://stackoverflow.com/questions/26650590/how-to-add-dependency-to-ant-project voir -->
     <available classname="org.apache.ivy.Main" property="ivy.installed"/>

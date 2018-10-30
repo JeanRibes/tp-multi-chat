@@ -15,7 +15,7 @@ echo "post-clean"
 rm *.java
 rm *.jar
 echo "package"
-jar cfm ../chat.jar mf.txt *
+jar cfe ../chat.jar MultiChat *
 cd ..
 echo "run"
 java -jar chat.jar &
