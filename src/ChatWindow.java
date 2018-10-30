@@ -75,7 +75,7 @@ public class ChatWindow extends JFrame {
     }
     
     public void setupWebSocket() throws URISyntaxException {
-		this.sync = new WebSocketClient(new URI("ws://localhost:8000/tchat/room")) {
+		this.sync = new WebSocketClient(new URI("wss://api.ribes.me/tchat/room")) {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
                 System.out.println("opened connection");
