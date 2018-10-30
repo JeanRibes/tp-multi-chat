@@ -26,12 +26,13 @@
   </target>
 
   <!--création du JAR-->
-  <target name="package" description="Création du JAR" depends="compile">
+  <target name="package" description="Création du JAR" depends="">
       <jar jarfile="${projet.jar.file}" basedir="${projet.bin.dir}" compress="true">
 	  <restrict> <!-- inclut les librairies dans le JAR-->
 	      <archives>
 	        <zips>
-	  	  <fileset dir="${projet.lib.dir}" includes="**/*.jar" />
+		    <fileset dir="${projet.lib.dir}" includes="**/*.jar"
+			excludes="*sources*,*javadoc*"/>
 	        </zips>
 	    </archives>
 	  </restrict>

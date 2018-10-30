@@ -40,6 +40,7 @@ public class ChatWindow extends JFrame {
 
         sendButton = new JButton("Envoyer");
         sendButton.setSize(100,30);
+        sendButton.setEnabled(false);
         sendButton.setLocation(250,50);
         sendButton.addActionListener(new Action() {
             public Object getValue(String key) {return null;}public void putValue(String key, Object value) {}public void setEnabled(boolean b) {}public boolean isEnabled() {return false;}public void addPropertyChangeListener(PropertyChangeListener listener) {}public void removePropertyChangeListener(PropertyChangeListener listener) {}
@@ -94,6 +95,7 @@ public class ChatWindow extends JFrame {
             public void onOpen(ServerHandshake serverHandshake) {
                 System.out.println("opened connection");
                 sync.send(username+" a rejoint la discussion");
+                sendButton.setEnabled(true);
             }
 
             @Override

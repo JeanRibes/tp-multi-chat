@@ -17,11 +17,10 @@ Il faut avoir `ant`, le CMake de Java.
 ## Comparatif de performances
 * Sur Tanit (single-core i686 1.4 GHz, hdd IDE)
 ```
-   ./build  1,01s user 0,17s system 18% cpu 6,513 total
+   ./build  4,44s user 0,32s system 65% cpu 7,267 total
    ant  14,90s user 1,28s system 48% cpu 33,529 total
 ```
 * Sur home.ribes.me (dual core 2.8GHz, RAID btrfs hdd)
 ```
-   ./build  0.39s user 0.08s system 115% cpu 0.405 total
    ant  6.93s user 0.69s system 136% cpu 5.602 total
 ```
