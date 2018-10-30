@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
@@ -10,18 +11,13 @@ public class MultiChat extends JFrame{
 		clients = new ChatWindow[0];
         setTitle("Chat manager");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        //setLayout(null);
-        setSize(400,90);
+        setSize(250,150);
         setLocation(10,30);
         setBackground(Color.red);
         JLabel monText = new JLabel("ajoutez des utilisateurs");
         monText.setBackground(Color.yellow);
-        //monText.setLocation(0,0);
-        //monText.setSize(500,20);
 
         JTextField monChampsTexte = new JTextField("Entrez ici le nom d'utilisateur");
-        //monChampsTexte.setLocation(0,20);
-        //monChampsTexte.setSize(140,30);
         monChampsTexte.addActionListener(new Action() {
             public Object getValue(String key) {return null;}public void putValue(String key, Object value) {}public void setEnabled(boolean b) {}public boolean isEnabled() {return false;}public void addPropertyChangeListener(PropertyChangeListener listener) {}public void removePropertyChangeListener(PropertyChangeListener listener) {}
             @Override
@@ -33,8 +29,6 @@ public class MultiChat extends JFrame{
         });
 
         JButton update = new JButton("ajouter cet utilisateur");
-        //update.setSize(200,40);
-        //update.setLocation(150,20);
         update.addActionListener(new Action() {
             public Object getValue(String key) {return null;}public void putValue(String key, Object value) {}public void setEnabled(boolean b) {}public boolean isEnabled() {return false;}public void addPropertyChangeListener(PropertyChangeListener listener) {}public void removePropertyChangeListener(PropertyChangeListener listener) {}
             @Override
@@ -56,6 +50,8 @@ public class MultiChat extends JFrame{
         //setContentPane(haut);
         add(haut, BorderLayout.NORTH);
         add(panneau, BorderLayout.CENTER);
+        
+        panneau.setBorder(new EmptyBorder(10,10,10,10));
         setVisible(true);
  }
     public void addClient(String username){
@@ -69,6 +65,9 @@ public class MultiChat extends JFrame{
 	}
 	
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}catch (UnsupportedLookAndFeelException e) {}catch (ClassNotFoundException e) {}catch (InstantiationException e) {}catch (IllegalAccessException e) {}
         new MultiChat();
     }
 }
