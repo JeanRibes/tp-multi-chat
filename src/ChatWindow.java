@@ -19,13 +19,14 @@ public class ChatWindow extends JFrame {
         System.out.println(username+" intializing");
         try {setupWebSocket();}
         catch(URISyntaxException e){e.printStackTrace();}
-        setLayout(null);
+        setLayout(new BorderLayout());
         setSize(500,600);
         setLocation(100,100);
         setTitle("Chat - "+username);
 
         messageField = new JTextField("votre message ici");
-        messageField.setBounds(3,50,230,30);
+        //messageField.setBounds(3,50,230,30);
+        messageField.setSize(150,30);
         messageField.addActionListener(new Action() {
             public Object getValue(String key) {return null;}public void putValue(String key, Object value) {}public void setEnabled(boolean b) {}public boolean isEnabled() {return false;}public void addPropertyChangeListener(PropertyChangeListener listener) {}public void removePropertyChangeListener(PropertyChangeListener listener) {}
             @Override
@@ -55,13 +56,26 @@ public class ChatWindow extends JFrame {
         JPanel scroll = new JPanel();
         scroll.setLayout(new BorderLayout());
         scroll.setSize(500,500);
-        scroll.setLocation(3,100);
+        scroll.setBackground(Color.magenta);
+        //scroll.setLocation(3,100);
         scroll.add(scrollPane);
+        history.setBackground(Color.gray);
         history.setEditable(false);
-
-        add(scroll);
-        add(sendButton);
-        add(messageField);
+		
+		JPanel haut = new JPanel();
+		JPanel bas = new JPanel();
+		haut.setLayout(new FlowLayout());
+		bas.setLayout(new FlowLayout());
+		haut.setBackground(Color.blue);
+		bas.setBackground(Color.green);
+		haut.add(messageField);
+		haut.add(sendButton);
+		//bas.add(scroll);
+		add(haut, BorderLayout.NORTH);
+		add(scroll, BorderLayout.CENTER);
+        //add(scroll);
+        //add(sendButton);
+        //add(messageField);
         
         addWindowListener(new WindowAdapter() {
 			@Override

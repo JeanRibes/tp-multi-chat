@@ -19,6 +19,7 @@
 	          destdir="${projet.bin.dir}" debug="off" 
 		  optimize="on" deprecation="on"
 		  includeantruntime="false"
+		  encoding="utf-8"
 		  classpathref="libs.path">
       <classpath refid="projet.classpath"/>
     </javac>
