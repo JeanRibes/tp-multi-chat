@@ -1,5 +1,8 @@
-#Chat local
-Je prévois de mettre une fonction Websocket pour tester avec tout le monde.
+#Chat en ligne
+Le tchat n'est pas synchronisé entre les fenêtres mais en ligne, avec tous les clients Websocket connectés.
+Il suffit d'un serveur 'dummy broadcast' qui renvoie à tout le monde ce qu'on lui envoie.
+
+On peut donc se parler entre PCs ET entre fenêtres.
 
 # Installer
 Il faut avoir `ant`, le CMake de Java.
@@ -16,4 +19,5 @@ Il faut avoir `ant`, le CMake de Java.
 ```
   ant  11,92s user 0,84s system 13% cpu 1:37,67 total
   ./build  4,13s user 0,31s system 56% cpu 7,811 total
+
 ```
