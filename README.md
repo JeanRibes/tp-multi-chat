@@ -1,8 +1,19 @@
-#Chat en ligne
+# Chat en ligne
+## Présentation
 Le tchat n'est pas synchronisé entre les fenêtres mais en ligne, avec tous les clients Websocket connectés.
 Il suffit d'un serveur 'dummy broadcast' qui renvoie à tout le monde ce qu'on lui envoie.
 
 On peut donc se parler entre PCs ET entre fenêtres.
+## Utilisation
+La fermeture de la fenêtre "Chat manager" entraîne la fermeture des autres. Il est possible de la cache.
+L'en-tête bleu indique que la connexion est établie.
+
+Vous pouvez changer de nom d'utilisateur en envoyant ``/nick``
+
+## Avancé
+On peut lancer une interface terminal avec ``java -jar Chat.jar -cli``.
+
+On peut démarrer directement une fenêtre de chat avec ``java -jar Chat.jar nom_utilisateur``
 
 # Installer
 Il faut avoir `ant`, le CMake de Java.

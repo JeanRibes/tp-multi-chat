@@ -4,7 +4,7 @@ public class TerminalChat implements ChatConnector.OnMessageListener,
 									 ChatConnector.OnReadyListener {
 	private Scanner sc;
 	private ChatConnector chat;
-	public String username;
+	private String username;
 	public boolean ready = false;
 	
 	public TerminalChat(){
@@ -30,15 +30,16 @@ public class TerminalChat implements ChatConnector.OnMessageListener,
 				if(message.equals("/quit")){System.exit(0);}
 				if(message.startsWith("/nick")){
 				    if(message.startsWith("/nicks")){setUsername(message.substring(7));continue;}
-                    chat.send(" * "+this.username+" a changé son pseudo en "+username+" * ");
-                    setUsername(message.substring(6));
+					String newUsername = message.substring(6);
+                    chat.send(" * "+this.username+" a changé son pseudo en "+newUsername+" * ");
+                    setUsername(newUsername);
 				} else {
 					chat.send("["+username +"]: "+message);
 				}
 			}
 		}).start();
 	}
-	public void setUsername(String username) {
+	void setUsername(String username) {
 	    this.username = username;
     }
 	public static void main (String args[]) {
