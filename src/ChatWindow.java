@@ -29,6 +29,7 @@ public class ChatWindow extends JFrame
         setSize(500, 600);
         setLocation(100, 100);
         setUsername(username);
+        setVisible(true);
 
         messageField = new JTextField("");
         messageField.addActionListener(this); //c'est pratique car toutes mes actions ont la même source
@@ -45,19 +46,26 @@ public class ChatWindow extends JFrame
         scroll.setLayout(new BorderLayout());
         scroll.setBackground(Color.darkGray);
         scroll.add(scrollPane);
+        //scrollPane.setAutoscrolls(true);
+        history.setLineWrap(true);
+        //scroll.setAutoscrolls(true);
+        //history.setAutoscrolls(true);
         history.setBackground(Color.gray);
         history.setEditable(false);
 
         haut = new JPanel();
-        GridLayout gl = new GridLayout(1, 2);
+        /*GridLayout gl = new GridLayout(1, 2);/
         gl.setHgap(20);
         haut.setLayout(gl);
-        haut.setBackground(Color.red);
         haut.add(messageField, "1");
-        haut.add(sendButton, "2");
+        haut.add(sendButton, "2");*/
+        haut.setBackground(Color.red);
+        haut.setLayout(new BorderLayout());
+        haut.add(messageField, BorderLayout.CENTER);
+        haut.add(sendButton, BorderLayout.EAST);
         haut.setBorder(new EmptyBorder(10, 10, 10, 10));
-        scroll.setBorder(new EmptyBorder(10, 10, 10, 10));
-        add(haut, BorderLayout.NORTH);
+        scroll.setBorder(new EmptyBorder(10, 10, 0, 10));
+        add(haut, BorderLayout.SOUTH);
         add(scroll, BorderLayout.CENTER);
 
         setVisible(true);
@@ -74,13 +82,15 @@ public class ChatWindow extends JFrame
     @Override
     public void receiveMsg(String message) {
         history.append("\n" + message);
+        scroll.scrollRectToVisible(new Rectangle(0,0,10,10));
+        history.setCaretPosition(history.getDocument().getLength());
     }
 
     @Override
     public void getReady() {
         receiveMsg("Connecté !");
         //receiveMsg(new String(new char[history.getColumns()).replace("\0", "-"));
-        receiveMsg("-------------------------------------------------------------------------------------------------------------------");
+        receiveMsg("-----------------------------------------------------------------------------------------------------------------");
         ready = true;
         sendButton.setEnabled(true);
         scroll.setBackground(Color.gray);
@@ -90,15 +100,8 @@ public class ChatWindow extends JFrame
     }
 
     public void send(String message) {
-        if(message.startsWith("/nick")){
-            String username = message.substring(5);
-            if(username.length()<2) {
-                username = chooseUsername();
-                if(username==null)
-                    return;
-            } else {username = username.substring(1);}
-            chat.send(" * "+this.username+" a changé son pseudo en "+username+" * ");
-            setUsername(username);
+        if(message.startsWith("/")) {
+            dispatchCommand(message);
         } else {
             chat.send("[" + username + "]: " + message);
         }
@@ -129,30 +132,53 @@ public class ChatWindow extends JFrame
         setTitle("Chat - " + username);
     }
     public String chooseUsername(){
-        String result = (String) JOptionPane.showInputDialog(
+        return  (String) JOptionPane.showInputDialog(
                 this,
                 "Choisissez un nouveau pseudo",
                 "Changement de pseudo",
                 JOptionPane.PLAIN_MESSAGE);
-        return result;
     }
+    public void dispatchCommand(String msg) {
+        if(msg.startsWith("/nick")){
+            String username = msg.substring(5);
+            if(username.length()<2) {
+                username = chooseUsername();
+                if(username==null)
+                    return;
+            } else {username = username.substring(1);}
+            chat.send(" * "+this.username+" a changé son pseudo en "+username+" * ");
+            setUsername(username);
+        }
+        if(msg.startsWith("/me")) {
+            chat.send("* "+this.username+msg.substring(3));
+        }
+        if(msg.equals("/quit")){
+            processWindowEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+            dispose();
+            setVisible(false);
+        }
+    }
+
     public void windowOpened(WindowEvent e) {
-    }
+        System.out.println("openned");}
 
     public void windowActivated(WindowEvent e) {
+        messageField.grabFocus();
+        //chat.send(" * "+this.username+" n'est plus afk *"); //spam trop
     }
-
-    public void windowIconified(WindowEvent e) {
+    public void windowIconified(WindowEvent e) { //ne marche pas sous Enlightenment
+        chat.send(" * "+this.username+" est maintenant afk *");
     }
 
     public void windowDeiconified(WindowEvent e) {
+        chat.send(" * "+this.username+" n'est plus afk *");
     }
 
-    public void windowDeactivated(WindowEvent e) {
+    public void windowDeactivated(WindowEvent e) { //marche
+        //chat.send(" * "+this.username+" est maintenant afk *");
     }
 
-    public void windowClosed(WindowEvent e) {
-    }
+    public void windowClosed(WindowEvent e) {}
 
     public static void main(String[] args) {
         new ChatWindow("test username");
