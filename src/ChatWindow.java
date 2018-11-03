@@ -13,6 +13,7 @@ public class ChatWindow extends JFrame
     public static int openChats;
 
     public static String message;
+    private CommandHistory commands;
     String username;
     public ChatConnector chat;
     public boolean ready = false;
@@ -21,8 +22,6 @@ public class ChatWindow extends JFrame
     JTextArea history;
     JPanel scroll;
     JPanel haut;
-    private ArrayList<String> commandHistory;
-    private int commandIndex;
 
     public ChatWindow(String username) {
         System.out.println(username + " is intializing");
@@ -71,10 +70,10 @@ public class ChatWindow extends JFrame
         add(haut, BorderLayout.SOUTH);
         add(scroll, BorderLayout.CENTER);
 
-        commandHistory = new ArrayList<String>();
         setVisible(true);
         openChats+=1;
         addWindowListener(this);
+        commands = new CommandHistory();
         try {
             receiveMsg("Connexion...");
             chat = new ChatConnector(this);
@@ -105,8 +104,8 @@ public class ChatWindow extends JFrame
     }
 
     public void send(String message) {
-        this.commandHistory.add(message);
-        commandIndex=commandHistory.size();
+        commands.add(message);
+        commands.reset();
         if(message.startsWith("/")) {
             dispatchCommand(message);
         } else {
@@ -206,25 +205,18 @@ public class ChatWindow extends JFrame
     @Override
     public void keyTyped(KeyEvent e) {
     }public void keyPressed(KeyEvent e) {
-        //System.out.println(e.getKeyCode());
         if(e.getKeyCode()==38) {
-            commandIndex-=1;
-            try{messageField.setText(commandHistory.get(commandIndex));}
-            catch (IndexOutOfBoundsException ex) {
-                //System.out.println(commandIndex+" -> error");
-                if(commandIndex<0){commandIndex+=1;} //on annule l'erreur précédente
-                return;
-            }
+            messageField.setText(commands.up());
+            return;
         }
         if(e.getKeyCode()==40){
-            commandIndex+=1;
-            if(commandIndex==commandHistory.size()){messageField.setText("");return;}
-            try{messageField.setText(commandHistory.get(commandIndex));}
-            catch (IndexOutOfBoundsException ex) {
-                //System.out.println(commandIndex+" -> error");
-                if(commandIndex>=commandHistory.size()){commandIndex-=1;}
-                return;
-            }
+            messageField.setText(commands.down());
+            return;
         }
+        if(e.getModifiers()==InputEvent.CTRL_MASK && e.getKeyCode()==67) {
+            System.out.println("yay");
+            messageField.setText("");
+        }
+        //System.out.println(e.getKeyCode());
     }public void keyReleased(KeyEvent e) {}
 }
