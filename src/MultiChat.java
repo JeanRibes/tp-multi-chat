@@ -1,18 +1,18 @@
 import java.awt.event.ActionListener;
-import java.util.Scanner;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeListener;
 
 public class MultiChat extends JFrame{
     ChatWindow[] clients;
+    public static MultiChat that;
+    public static boolean visible = true;
     public MultiChat(){
 		clients = new ChatWindow[0];
         setTitle("Chat manager");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(250,150);
+        setSize(250,160);
         setLocation(10,30);
         setBackground(Color.red);
         JLabel monText = new JLabel("ajoutez des utilisateurs");
@@ -42,9 +42,10 @@ public class MultiChat extends JFrame{
         hide.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if(clients[0].openChats>0) {
+                if(ChatWindow.openChats>0) {
                     setVisible(false);
-                    clients[0].openChats -= 1;
+                    visible = false;
+                    ChatWindow.openChats -=1;
                 }
             }
         });
@@ -78,8 +79,26 @@ public class MultiChat extends JFrame{
 	
 	public static void main(String[] args) {
 		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}catch (UnsupportedLookAndFeelException e) {}catch (ClassNotFoundException e) {}catch (InstantiationException e) {}catch (IllegalAccessException e) {}
-        new MultiChat();
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) { //merci StackOverflow
+                System.out.println(info.getClassName());
+                if ("javax.swing.plaf.nimbus.NimbusLookAndFeel".equals(info.getClassName())) { //le plus beau
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+                if ("com.sun.java.swing.plaf.gtk.GTKLookAndFeel".equals(info.getClassName())) { //y'a des problèmes avec les bordures c'est un peu moche
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        }catch (Exception e) {}
+
+        that = new MultiChat();
+    }
+    public static boolean revoir(){
+        if(!visible) {
+            that.setVisible(true);
+            return true;
+        } else return false;
     }
 }

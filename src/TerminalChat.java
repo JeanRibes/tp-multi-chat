@@ -9,11 +9,16 @@ public class TerminalChat implements ChatConnector.OnMessageListener,
 	
 	public TerminalChat(){
 		sc = new Scanner(System.in);
-        System.out.print("Choisissez un pseudo ? >");
-        setUsername(sc.nextLine());
-        
+        	System.out.print("Choisissez un pseudo ? > ");
+        	setUsername(sc.nextLine());
 		try {chat = new ChatConnector(this);} //initialisation du chat
-        catch(URISyntaxException e){e.printStackTrace();}
+        	catch(URISyntaxException e){e.printStackTrace();}
+	}
+        public TerminalChat(String username) {	
+        	setUsername(username);
+		sc = new Scanner(System.in);
+		try {chat = new ChatConnector(this);} //initialisation du chat
+        	catch(URISyntaxException e){e.printStackTrace();}
 	}
 	
 	@Override

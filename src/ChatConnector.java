@@ -8,6 +8,7 @@ public class ChatConnector extends WebSocketClient{
 	public String lastMessage;
 	private OnMessageListener messageListener;
 	private OnReadyListener	readyListener;
+    private long pingSTartTime;
 	public ChatConnector(Object context) throws URISyntaxException{
 		super(new URI("wss://api.ribes.me/tchat/room"));
 		System.out.println("Connexion au serveur de tchat");
@@ -28,6 +29,12 @@ public class ChatConnector extends WebSocketClient{
 	}
 	
 	public void onMessage(String message){
+        if(pingSTartTime !=0 && message.startsWith("pong")){
+            long ping = System.currentTimeMillis()- pingSTartTime;
+            message = "ping: "+ping;
+            pingSTartTime = 0;
+        }
+        if(message.startsWith("pong")){return;}
 		System.out.println("\r"+message);
 		messageListener.receiveMsg(message);
 		this.lastMessage = message;
@@ -46,5 +53,10 @@ public class ChatConnector extends WebSocketClient{
 		System.out.println("ERREUR WEBSOCKET");
 		ex.printStackTrace();
 	}
+
+	public void testPing(){
+	    send("pong");
+	    pingSTartTime = System.currentTimeMillis();
+    }
 }
 

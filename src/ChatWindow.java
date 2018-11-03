@@ -2,14 +2,14 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeListener;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 public class ChatWindow extends JFrame
         implements ChatConnector.OnMessageListener,
         ChatConnector.OnReadyListener,
         WindowListener,
-        ActionListener {
+        ActionListener, KeyListener {
     public static int openChats;
 
     public static String message;
@@ -21,6 +21,8 @@ public class ChatWindow extends JFrame
     JTextArea history;
     JPanel scroll;
     JPanel haut;
+    private ArrayList<String> commandHistory;
+    private int commandIndex;
 
     public ChatWindow(String username) {
         System.out.println(username + " is intializing");
@@ -33,6 +35,7 @@ public class ChatWindow extends JFrame
 
         messageField = new JTextField("");
         messageField.addActionListener(this); //c'est pratique car toutes mes actions ont la même source
+        messageField.addKeyListener(this);
 
         sendButton = new JButton("Envoyer");
         sendButton.setEnabled(false);
@@ -68,6 +71,7 @@ public class ChatWindow extends JFrame
         add(haut, BorderLayout.SOUTH);
         add(scroll, BorderLayout.CENTER);
 
+        commandHistory = new ArrayList<String>();
         setVisible(true);
         openChats+=1;
         addWindowListener(this);
@@ -77,6 +81,7 @@ public class ChatWindow extends JFrame
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+        messageField.grabFocus();
     }
 
     @Override
@@ -100,6 +105,8 @@ public class ChatWindow extends JFrame
     }
 
     public void send(String message) {
+        this.commandHistory.add(message);
+        commandIndex=commandHistory.size();
         if(message.startsWith("/")) {
             dispatchCommand(message);
         } else {
@@ -118,7 +125,6 @@ public class ChatWindow extends JFrame
             setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         }
         openChats-=1;
-
     }
 
     @Override
@@ -157,11 +163,24 @@ public class ChatWindow extends JFrame
             dispose();
             setVisible(false);
         }
+        if(msg.equals("/new")){
+            if(MultiChat.revoir()) //que du sale
+                openChats+=1;
+        }
+        if(msg.startsWith("/help")) {
+            receiveMsg("====Aide====\n * /nick pour changer de pseudo\n * /new pour ré-afficher le manager");
+            receiveMsg(" * /ping pour tester la connectivité");
+            receiveMsg(" * /me pour un status\n * /quit pour fermer\n============");
+        }
+        if(msg.startsWith("/ping")) {
+            chat.testPing();
+        }
     }
 
     public void windowOpened(WindowEvent e) {
-        System.out.println("openned");}
-
+        System.out.println("openned");
+        messageField.grabFocus();
+    }
     public void windowActivated(WindowEvent e) {
         messageField.grabFocus();
         //chat.send(" * "+this.username+" n'est plus afk *"); //spam trop
@@ -183,4 +202,29 @@ public class ChatWindow extends JFrame
     public static void main(String[] args) {
         new ChatWindow("test username");
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }public void keyPressed(KeyEvent e) {
+        //System.out.println(e.getKeyCode());
+        if(e.getKeyCode()==38) {
+            commandIndex-=1;
+            try{messageField.setText(commandHistory.get(commandIndex));}
+            catch (IndexOutOfBoundsException ex) {
+                //System.out.println(commandIndex+" -> error");
+                if(commandIndex<0){commandIndex+=1;} //on annule l'erreur précédente
+                return;
+            }
+        }
+        if(e.getKeyCode()==40){
+            commandIndex+=1;
+            if(commandIndex==commandHistory.size()){messageField.setText("");return;}
+            try{messageField.setText(commandHistory.get(commandIndex));}
+            catch (IndexOutOfBoundsException ex) {
+                //System.out.println(commandIndex+" -> error");
+                if(commandIndex>=commandHistory.size()){commandIndex-=1;}
+                return;
+            }
+        }
+    }public void keyReleased(KeyEvent e) {}
 }
