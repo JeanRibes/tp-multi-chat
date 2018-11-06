@@ -74,6 +74,7 @@ public class ChatWindow extends JFrame
         openChats+=1;
         addWindowListener(this);
         commands = new CommandHistory();
+        dispatchCommand("/help");
         try {
             receiveMsg("Connexion...");
             chat = new ChatConnector(this);

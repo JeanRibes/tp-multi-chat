@@ -10,7 +10,8 @@ public class ChatConnector extends WebSocketClient{
 	private OnReadyListener	readyListener;
     private long pingSTartTime;
 	public ChatConnector(Object context) throws URISyntaxException{
-		super(new URI("wss://api.ribes.me/tchat/room"));
+		//super(new URI("wss://api.ribes.me/tchat/room"));
+		super(new URI("ws://5093937a.ngrok.io/tchat/room"));
 		System.out.println("Connexion au serveur de tchat");
 		messageListener = (OnMessageListener) context;
 		readyListener = (OnReadyListener) context;

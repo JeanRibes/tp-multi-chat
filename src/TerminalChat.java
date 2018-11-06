@@ -41,6 +41,7 @@ public class TerminalChat implements ChatConnector.OnMessageListener,
 				} else {
 					chat.send("["+username +"]: "+message);
 				}
+				if(message.startsWith("/ping")){chat.testPing();}
 			}
 		}).start();
 	}
