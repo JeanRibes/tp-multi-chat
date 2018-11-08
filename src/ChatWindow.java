@@ -23,7 +23,7 @@ public class ChatWindow extends JFrame
     JPanel scroll;
     JPanel haut;
 
-    public ChatWindow(String username) {
+    public ChatWindow(String username, String wsUrl) {
         System.out.println(username + " is intializing");
 
         setLayout(new BorderLayout(0, 0));
@@ -77,7 +77,7 @@ public class ChatWindow extends JFrame
         dispatchCommand("/help");
         try {
             receiveMsg("Connexion...");
-            chat = new ChatConnector(this);
+            chat = new ChatConnector(this, wsUrl);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -200,7 +200,7 @@ public class ChatWindow extends JFrame
     public void windowClosed(WindowEvent e) {}
 
     public static void main(String[] args) {
-        new ChatWindow("test username");
+        new ChatWindow("test username", "ws://api.ribes.ovh");
     }
 
     @Override

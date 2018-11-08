@@ -7,17 +7,17 @@ public class TerminalChat implements ChatConnector.OnMessageListener,
 	private String username;
 	public boolean ready = false;
 	
-	public TerminalChat(){
+	public TerminalChat(String server){
 		sc = new Scanner(System.in);
         	System.out.print("Choisissez un pseudo ? > ");
         	setUsername(sc.nextLine());
-		try {chat = new ChatConnector(this);} //initialisation du chat
+		try {chat = new ChatConnector(this, server);} //initialisation du chat
         	catch(URISyntaxException e){e.printStackTrace();}
 	}
-        public TerminalChat(String username) {	
+        public TerminalChat(String username, String server) {
         	setUsername(username);
 		sc = new Scanner(System.in);
-		try {chat = new ChatConnector(this);} //initialisation du chat
+		try {chat = new ChatConnector(this, server);} //initialisation du chat
         	catch(URISyntaxException e){e.printStackTrace();}
 	}
 	
@@ -49,7 +49,7 @@ public class TerminalChat implements ChatConnector.OnMessageListener,
 	    this.username = username;
     }
 	public static void main (String args[]) {
-		new TerminalChat();
+		new TerminalChat("ws://api.ribes.ovh");
 	}
 }
 

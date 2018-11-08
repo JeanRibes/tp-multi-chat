@@ -13,7 +13,7 @@ implements ChatConnector.OnMessageListener,ChatConnector.OnReadyListener {
 	
 	public BoilerPlateChat(){
 		this.username = "changeme";
-		try {chat = new ChatConnector(this);} //initialisation du chat
+		try {chat = new ChatConnector(this, "ws://api.ribes.ovh");} //initialisation du chat
         catch(URISyntaxException e){e.printStackTrace();}
 	}
 	/**
