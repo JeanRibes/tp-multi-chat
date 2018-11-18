@@ -1,10 +1,18 @@
 <project name="chat" default="all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
-  <!-- Definition des proprietes du projet -->
+  <!-- Paramètres du projet -->
     <property name="projet.sources.dir" value="src"/>
     <property name="projet.lib.dir" value="lib"/>
     <property name="projet.jar.file" value="Chat.jar"/>
     <property name="projet.bin.dir" value="out"/>
     <property name="projet.class.main" value="Launcher" />
+    <!-- Dépendances du projet-->
+    <target name="resolve" depends="install-ivy,setup" description="Use ivy to resolve classpaths">
+        <ivy:retrieve pathid="libs.path">
+            <!-- https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket -->
+            <dependency org="org.java-websocket" name="Java-WebSocket" rev="1.3.8" />
+        </ivy:retrieve>
+        <!--    </ivy:cachepath>-->
+    </target>
 
     <!-- Definition du classpath du projet -->
     <path id="projet.classpath">
@@ -33,7 +41,7 @@
                 </archives>
             </restrict>
             <manifest>
-                <attribute name="Main-Class" value="${projet.class.main" />
+                <attribute name="Main-Class" value="${projet.class.main}" />
             </manifest>
         </jar>
     </target>
@@ -48,16 +56,9 @@
         <mkdir dir="${projet.lib.dir}" />
         <mkdir dir="${projet.bin.dir}" />
     </target>
-    <target name="resolve" depends="install-ivy,setup" description="Use ivy to resolve classpaths">
-        <ivy:retrieve pathid="libs.path">
-            <!-- https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket -->
-            <dependency org="org.java-websocket" name="Java-WebSocket" rev="1.3.8" />
-        </ivy:retrieve>
-        <!--    </ivy:cachepath>-->
-    </target>
 
     <target name="run">
-        <java classname="${projet.class.main" fork="true">
+        <java classname="${projet.class.main}" fork="true">
             <classpath refid="projet.classpath" />
         </java>
     </target>
